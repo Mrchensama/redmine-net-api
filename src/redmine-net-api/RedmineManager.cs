@@ -44,41 +44,42 @@ namespace Redmine.Net.Api
 
         private static readonly Dictionary<Type, string> Routes = new Dictionary<Type, string>
         {
-            {typeof(Issue), "issues"},
-            {typeof(Project), "projects"},
-            {typeof(User), "users"},
-            {typeof(News), "news"},
-            {typeof(Query), "queries"},
-            {typeof(Version), "versions"},
-            {typeof(Attachment), "attachments"},
-            {typeof(IssueRelation), "relations"},
-            {typeof(TimeEntry), "time_entries"},
-            {typeof(IssueStatus), "issue_statuses"},
-            {typeof(Tracker), "trackers"},
-            {typeof(IssueCategory), "issue_categories"},
-            {typeof(Role), "roles"},
-            {typeof(ProjectMembership), "memberships"},
-            {typeof(Group), "groups"},
-            {typeof(TimeEntryActivity), "enumerations/time_entry_activities"},
-            {typeof(IssuePriority), "enumerations/issue_priorities"},
-            {typeof(Watcher), "watchers"},
-            {typeof(IssueCustomField), "custom_fields"},
-            {typeof(CustomField), "custom_fields"},
-            {typeof(Search), "search"}
+            { typeof(Issue), "issues" },
+            { typeof(Project), "projects" },
+            { typeof(User), "users" },
+            { typeof(News), "news" },
+            { typeof(Query), "queries" },
+            { typeof(Version), "versions" },
+            { typeof(Attachment), "attachments" },
+            { typeof(IssueRelation), "relations" },
+            { typeof(TimeEntry), "time_entries" },
+            { typeof(IssueStatus), "issue_statuses" },
+            { typeof(Tracker), "trackers" },
+            { typeof(IssueCategory), "issue_categories" },
+            { typeof(Role), "roles" },
+            { typeof(ProjectMembership), "memberships" },
+            { typeof(Group), "groups" },
+            { typeof(TimeEntryActivity), "enumerations/time_entry_activities" },
+            { typeof(IssuePriority), "enumerations/issue_priorities" },
+            { typeof(Watcher), "watchers" },
+            { typeof(IssueCustomField), "custom_fields" },
+            { typeof(CustomField), "custom_fields" },
+            { typeof(Search), "search" }
         };
 
         /// <summary>
         /// 
         /// </summary>
-        public static readonly Dictionary<Type, bool> TypesWithOffset = new Dictionary<Type, bool>{
-            {typeof(Issue), true},
-            {typeof(Project), true},
-            {typeof(User), true},
-            {typeof(News), true},
-            {typeof(Query), true},
-            {typeof(TimeEntry), true},
-            {typeof(ProjectMembership), true},
-            {typeof(Search), true}
+        public static readonly Dictionary<Type, bool> TypesWithOffset = new Dictionary<Type, bool>
+        {
+            { typeof(Issue), true },
+            { typeof(Project), true },
+            { typeof(User), true },
+            { typeof(News), true },
+            { typeof(Query), true },
+            { typeof(TimeEntry), true },
+            { typeof(ProjectMembership), true },
+            { typeof(Search), true }
         };
 
         private readonly string basicAuthorization;
@@ -103,7 +104,8 @@ namespace Redmine.Net.Api
         ///     The host is not valid!
         /// </exception>
         public RedmineManager(string host, MimeFormat mimeFormat = MimeFormat.Xml, bool verifyServerCert = true,
-            IWebProxy proxy = null, SecurityProtocolType securityProtocolType = default, string scheme = "https", TimeSpan? timeout = null)
+            IWebProxy proxy = null, SecurityProtocolType securityProtocolType = default, string scheme = "https",
+            TimeSpan? timeout = null)
         {
             if (string.IsNullOrEmpty(host))
             {
@@ -201,7 +203,8 @@ namespace Redmine.Net.Api
         {
             cache = new CredentialCache { { new Uri(host), "Basic", new NetworkCredential(login, password) } };
 
-            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}:{1}", login, password)));
+            var token = Convert.ToBase64String(
+                Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}:{1}", login, password)));
             basicAuthorization = string.Format(CultureInfo.InvariantCulture, "Basic {0}", token);
         }
 
@@ -222,7 +225,7 @@ namespace Redmine.Net.Api
         /// 
         /// </summary>
         public string Scheme { get; private set; }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -249,7 +252,8 @@ namespace Redmine.Net.Api
 
                 host = $"{Scheme ?? "https"}://{host}";
 
-                if (!Uri.TryCreate(host, UriKind.Absolute, out uriResult)) throw new RedmineException("The host is not valid!");
+                if (!Uri.TryCreate(host, UriKind.Absolute, out uriResult))
+                    throw new RedmineException("The host is not valid!");
 
                 Scheme = uriResult.Scheme;
             }
@@ -275,15 +279,6 @@ namespace Redmine.Net.Api
         ///     The size of the page.
         /// </value>
         public int PageSize { get; set; }
-
-        /// <summary>
-        ///     As of Redmine 2.2.0 you can impersonate user setting user login (eg. jsmith). This only works when using the API
-        ///     with an administrator account, this header will be ignored when using the API with a regular user account.
-        /// </summary>
-        /// <value>
-        ///     The impersonate user.
-        /// </value>
-        public string ImpersonateUser { get; set; }
 
         /// <summary>
         ///     Gets the MIME format.
@@ -333,7 +328,7 @@ namespace Redmine.Net.Api
             var url = UrlHelper.GetMyAccountUrl(this);
             return WebApiHelper.ExecuteDownload<MyAccount>(this, url);
         }
-        
+
         /// <summary>
         ///     Adds the watcher to issue.
         /// </summary>
@@ -639,6 +634,7 @@ namespace Redmine.Net.Api
                 isLimitSet = int.TryParse(parameters[RedmineKeys.LIMIT], out pageSize);
                 int.TryParse(parameters[RedmineKeys.OFFSET], out offset);
             }
+
             if (pageSize == default)
             {
                 pageSize = PageSize > 0 ? PageSize : DEFAULT_PAGE_SIZE_VALUE;
@@ -672,8 +668,7 @@ namespace Redmine.Net.Api
                         }
 
                         offset += pageSize;
-                    }
-                    while (offset < totalCount);
+                    } while (offset < totalCount);
                 }
                 else
                 {
@@ -688,6 +683,7 @@ namespace Redmine.Net.Api
             {
                 wex.HandleWebException(Serializer);
             }
+
             return resultList;
         }
 
@@ -853,7 +849,7 @@ namespace Redmine.Net.Api
             return WebApiHelper.ExecuteDownloadFile(this, address);
         }
 
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -865,7 +861,8 @@ namespace Redmine.Net.Api
         /// Returns the search results by the specified condition parameters.
         /// </returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public PagedResults<Search> Search(string q, int limit = DEFAULT_PAGE_SIZE_VALUE, int offset = 0, SearchFilterBuilder searchFilter = null)
+        public PagedResults<Search> Search(string q, int limit = DEFAULT_PAGE_SIZE_VALUE, int offset = 0,
+            SearchFilterBuilder searchFilter = null)
         {
             if (q.IsNullOrWhiteSpace())
             {
@@ -874,23 +871,25 @@ namespace Redmine.Net.Api
 
             var parameters = new NameValueCollection
             {
-                {RedmineKeys.Q, q},
-                {RedmineKeys.LIMIT, limit.ToString(CultureInfo.InvariantCulture)},
-                {RedmineKeys.OFFSET, offset.ToString(CultureInfo.InvariantCulture)},
+                { RedmineKeys.Q, q },
+                { RedmineKeys.LIMIT, limit.ToString(CultureInfo.InvariantCulture) },
+                { RedmineKeys.OFFSET, offset.ToString(CultureInfo.InvariantCulture) },
             };
 
             if (searchFilter != null)
             {
-               parameters = searchFilter.Build(parameters);
+                parameters = searchFilter.Build(parameters);
             }
-            
+
             var result = GetPaginatedObjects<Search>(parameters);
 
             return result;
         }
-        
-        private const string UA = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1";
 
+        private const string UA =
+            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1";
+
+        // TODO：method 'CreateWebClient' should not create new WebClient for every call. 
         /// <summary>
         ///     Creates the Redmine web client.
         /// </summary>
@@ -898,9 +897,10 @@ namespace Redmine.Net.Api
         /// <param name="uploadFile">if set to <c>true</c> [upload file].</param>
         /// <returns></returns>
         /// <code></code>
-        public virtual RedmineWebClient CreateWebClient(NameValueCollection parameters, bool uploadFile = false)
+        public virtual RedmineWebClient CreateWebClient(NameValueCollection parameters, bool uploadFile = false,
+            string impersonateUser = null)
         {
-            var webClient = new RedmineWebClient { Scheme = Scheme, RedmineSerializer = Serializer};
+            var webClient = new RedmineWebClient { Scheme = Scheme, RedmineSerializer = Serializer };
             webClient.UserAgent = UA;
             webClient.Timeout = Timeout;
             if (!uploadFile)
@@ -945,9 +945,9 @@ namespace Redmine.Net.Api
                 webClient.UseProxy = true;
             }
 
-            if (!string.IsNullOrEmpty(ImpersonateUser))
+            if (!string.IsNullOrEmpty(impersonateUser))
             {
-                webClient.Headers.Add("X-Redmine-Switch-User", ImpersonateUser);
+                webClient.Headers.Add("X-Redmine-Switch-User", impersonateUser);
             }
 
             return webClient;
@@ -962,12 +962,13 @@ namespace Redmine.Net.Api
         /// <param name="sslPolicyErrors">The error.</param>
         /// <returns></returns>
         /// <code></code>
-        public virtual bool RemoteCertValidate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        public virtual bool RemoteCertValidate(object sender, X509Certificate cert, X509Chain chain,
+            SslPolicyErrors sslPolicyErrors)
         {
             const SslPolicyErrors ignoredErrors =
                 SslPolicyErrors.RemoteCertificateChainErrors |
                 SslPolicyErrors.RemoteCertificateNameMismatch;
- 
+
             if ((sslPolicyErrors & ~ignoredErrors) == SslPolicyErrors.None)
             {
                 return true;
