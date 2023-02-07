@@ -895,6 +895,7 @@ namespace Redmine.Net.Api
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="uploadFile">if set to <c>true</c> [upload file].</param>
+        /// <param name="impersonateUser"> As of Redmine 2.2.0 you can impersonate user setting user login (eg. jsmith). This only works when using the API with an administrator account, this header will be ignored when using the API with a regular user account. </param>
         /// <returns></returns>
         /// <code></code>
         public virtual RedmineWebClient CreateWebClient(NameValueCollection parameters, bool uploadFile = false,
